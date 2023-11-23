@@ -7,37 +7,47 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.FileConfigurationOptions;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
+import org.springframework.boot.Banner;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.io.FileSystemResource;
 
+import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 
-@SpringBootApplication
 public class NextGenEconomy extends JavaPlugin {
 
     @Getter
     private static NextGenEconomy instance;
 
-    private static AnnotationConfigApplicationContext applicationContext;
+    private static ConfigurableApplicationContext applicationContext;
 
     @Override
-    public final void onEnable() {
+    public void onEnable() {
         instance = this;
         Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
 
         setupConfig();
-
-        applicationContext = new AnnotationConfigApplicationContext();
-        applicationContext.scan("de.rjst.nextgeneconomy");
-        applicationContext.refresh();
+        applicationContext =
+                new SpringApplicationBuilder(NetGenEconomySpringBoot.class)
+                        .bannerMode(Banner.Mode.OFF)
+                        .properties(loadConfig())
+                        .initializers(appContext -> appContext.setClassLoader(getClassLoader()))
+                        .build()
+                        .run();
 
     }
 
     @Override
-    public final void onDisable() {
-        applicationContext.close();
+    public void onDisable() {
+        if (applicationContext != null) {
+            applicationContext.close();
+        }
     }
 
     private void setupConfig() {
@@ -60,4 +70,20 @@ public class NextGenEconomy extends JavaPlugin {
             config.addDefault(message.getPath(Locale.GERMAN), message.getGerman());
         }
     }
+
+    private Map<String, Object> loadConfig() {
+        final YamlPropertiesFactoryBean yamlFactory = new YamlPropertiesFactoryBean();
+        yamlFactory.setResources(new FileSystemResource(new File(getDataFolder(), "config.yml")));
+        final var properties = yamlFactory.getObject();
+
+        final Map<String, Object> result = new HashMap<>();
+        if (properties != null) {
+            for (final Map.Entry<Object, Object> entry : properties.entrySet()) {
+                final Object key = entry.getKey();
+                result.put(key.toString(), entry.getValue());
+            }
+        }
+        return result;
+    }
+
 }
