@@ -1,0 +1,11 @@
+name: NextGenEconomy
+version: '${project.version}'
+main: de.rjst.nextgeneconomy.NextGenEconomy
+api-version: '1.20'
+
+dependencies:
+  server:
+    Vault:
+      load: AFTER
+      required: true
+      join-classpath: true
