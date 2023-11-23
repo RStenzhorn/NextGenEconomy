@@ -20,12 +20,16 @@ ALTER TABLE economy
 ALTER TABLE economy
     ADD PRIMARY KEY (uuid);
 
-DROP
-COLUMN uuid,
-    CHANGE COLUMN new_uuid_binary uuid BINARY(16);
+alter table economy
+    drop column uuid;
+
+alter table economy
+    change new_uuid_binary uuid binary(16) null;
 
 ALTER TABLE economy
     MODIFY balance DECIMAL (38, 2) DEFAULT 0 NOT NULL;
 
 ALTER TABLE economy
     ADD PRIMARY KEY (uuid);
+
+rename table economy to economy_player;
