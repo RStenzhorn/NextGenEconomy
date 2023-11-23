@@ -68,7 +68,7 @@ public class BalanceCommand implements CommandExecutor {
                     bukkitScheduler.runTaskAsynchronously(NextGenEconomy.getInstance(), () -> {
                         final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[0]);
                         final Optional<BigDecimal> optionalBalance = nextGenEconomyApi.getBalance(offlinePlayer.getUniqueId());
-                        if (optionalBalance.isPresent()) {
+                        if (optionalBalance.isPresent() && offlinePlayer.hasPlayedBefore()) {
                             final BigDecimal balance = optionalBalance.get();
                             final String playerName = Objects.requireNonNull(offlinePlayer.getName());
                             sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
@@ -77,10 +77,14 @@ public class BalanceCommand implements CommandExecutor {
                                             Placeholder.CURRENCY, nextGenEconomyApi.format(balance)))
                                     .locale(locale)
                                     .ngeMessage(NgeMessage.MESSAGE_CMD_BALANCE_OTHER).build()));
+                        } else {
+                            sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
+                                    .locale(locale)
+                                    .ngeMessage(NgeMessage.MESSAGE_ERROR_PLAYER_NOT_FOUND).build()));
                         }
                     });
                 } else {
-                    sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
+                   sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
                             .locale(locale)
                             .ngeMessage(NgeMessage.MESSAGE_ERROR_NO_PERMISSION).build()));
                 }

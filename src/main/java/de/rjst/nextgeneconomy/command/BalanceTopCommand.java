@@ -129,14 +129,15 @@ public class BalanceTopCommand implements CommandExecutor {
         for (final EconomyPlayerUnit unit : page) {
             final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(unit.getId());
             final BigDecimal balance = unit.getBalance();
-
-            sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
-                    .placeholders(Map.of(
-                            Placeholder.POSITION, String.valueOf(rank),
-                            Placeholder.PLAYER, Objects.requireNonNull(offlinePlayer.getName()),
-                            Placeholder.CURRENCY, nextGenEconomyApi.format(balance)))
-                    .locale(locale)
-                    .ngeMessage(NgeMessage.MESSAGE_CMD_BALANCE_TOP).build()));
+            if (offlinePlayer.hasPlayedBefore()) {
+                sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
+                        .placeholders(Map.of(
+                                Placeholder.POSITION, String.valueOf(rank),
+                                Placeholder.PLAYER, Objects.requireNonNull(offlinePlayer.getName()),
+                                Placeholder.CURRENCY, nextGenEconomyApi.format(balance)))
+                        .locale(locale)
+                        .ngeMessage(NgeMessage.MESSAGE_CMD_BALANCE_TOP).build()));
+            }
             rank++;
         }
     }

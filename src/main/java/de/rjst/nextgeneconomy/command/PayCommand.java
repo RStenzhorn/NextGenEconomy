@@ -56,7 +56,7 @@ public class PayCommand implements CommandExecutor {
 
                         if (optionalCurrency.isPresent()) {
                             final BigDecimal amount = optionalCurrency.get();
-                            if (nextGenEconomyApi.hasAccount(targetUuid)) {
+                            if (nextGenEconomyApi.hasAccount(targetUuid) && offlinePlayer.hasPlayedBefore()) {
                                 if (nextGenEconomyApi.removeBalance(playerUuid, amount)) {
                                     if (nextGenEconomyApi.addBalance(targetUuid, amount)) {
                                         sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
