@@ -2,14 +2,11 @@ package de.rjst.nextgeneconomy.command;
 
 import de.rjst.nextgeneconomy.api.NextGenEconomyApi;
 import de.rjst.nextgeneconomy.config.bean.PluginCommand;
-import de.rjst.nextgeneconomy.database.repository.EconomyPlayerRepository;
 import de.rjst.nextgeneconomy.database.unit.EconomyPlayerUnit;
-import de.rjst.nextgeneconomy.logic.config.PropertySupplier;
 import de.rjst.nextgeneconomy.model.MessageRequest;
 import de.rjst.nextgeneconomy.model.MessageRequestImpl;
 import de.rjst.nextgeneconomy.setting.NgeMessage;
 import de.rjst.nextgeneconomy.setting.NgePermission;
-import de.rjst.nextgeneconomy.setting.NgeSetting;
 import de.rjst.nextgeneconomy.setting.Placeholder;
 import de.rjst.nextgeneconomy.util.NgeUtil;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +20,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -41,10 +39,7 @@ import java.util.function.Function;
 public class BalanceTopCommand implements CommandExecutor {
 
     private final NextGenEconomyApi nextGenEconomyApi;
-
-    private static final String SORT_FIELD = "balance";
-
-    private final PropertySupplier propertySupplier;
+    private static final String FIRST_PAGE_NUMBER = "1";
 
     @Qualifier("balanceTopSupplier")
     private final Function<Integer, Page<EconomyPlayerUnit>> balanceTopSupplier;
@@ -64,7 +59,7 @@ public class BalanceTopCommand implements CommandExecutor {
                     final Page<EconomyPlayerUnit> page = balanceTopSupplier.apply(0);
                     sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
                             .placeholders(Map.of(
-                                    Placeholder.PAGE, "1",
+                                    Placeholder.PAGE, FIRST_PAGE_NUMBER,
                                     Placeholder.MAX_PAGE, String.valueOf(page.getTotalPages())
                             ))
                             .locale(locale)
@@ -121,7 +116,6 @@ public class BalanceTopCommand implements CommandExecutor {
         for (final EconomyPlayerUnit unit : page) {
             final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(unit.getId());
             final BigDecimal balance = unit.getBalance();
-            log.info("UUID: {}", unit.getId());
             if (offlinePlayer.hasPlayedBefore()) {
                 sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
                         .placeholders(Map.of(
@@ -133,12 +127,6 @@ public class BalanceTopCommand implements CommandExecutor {
             }
             rank++;
         }
-    }
-
-    private Pageable getPageable(final Integer page) {
-        final int size = propertySupplier.apply(NgeSetting.BALANCE_TOP_PAGE_SIZE, Integer.class);
-        final Sort sort = Sort.by(SORT_FIELD).descending();
-       return PageRequest.of(page, size, sort);
     }
 
     private static int getRank(final int pageNumber, final int size) {

@@ -12,7 +12,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 @RequiredArgsConstructor
 @Service("balanceTopSupplier")
@@ -20,7 +19,8 @@ public class BalanceTopSupplier implements Function<Integer, Page<EconomyPlayerU
 
     private final EconomyPlayerRepository economyPlayerRepository;
 
-    private static final String SORT_FIELD = "balance";
+    private static final String BALANCE = "balance";
+    private static final String UUID = "id";
 
     private final PropertySupplier propertySupplier;
 
@@ -28,7 +28,7 @@ public class BalanceTopSupplier implements Function<Integer, Page<EconomyPlayerU
     @Override
     public Page<EconomyPlayerUnit> apply(final Integer page) {
         final int size = propertySupplier.apply(NgeSetting.BALANCE_TOP_PAGE_SIZE, Integer.class);
-        final Sort sort = Sort.by(SORT_FIELD).descending();
+        final Sort sort = Sort.by(Sort.Order.desc(BALANCE), Sort.Order.asc(UUID));
         return economyPlayerRepository.findAll(PageRequest.of(page, size, sort));
     }
 }

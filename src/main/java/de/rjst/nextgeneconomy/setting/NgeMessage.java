@@ -93,23 +93,23 @@ public enum NgeMessage {
     MESSAGE_CMD_ECO_USAGE(
             "messages.cmd.eco.usage",
             "%PREFIX% Verwende: /eco <take | give | set> <Spieler> <Betrag>",
-            "%PREFIX% Usage: /pay <Player> <Amount>"
+            "%PREFIX% Use: /eco <take | give | set> <player> <amount>"
     ),
 
     MESSAGE_CMD_ECO_TAKE(
             "messages.cmd.eco.take",
             "%PREFIX% Du hast %PLAYER% einen Betrag in Höhe von %CURRENCY% abgezogen.",
-            ""
+            "%PREFIX% You have deducted an amount of %CURRENCY% from %PLAYER%."
     ),
     MESSAGE_CMD_ECO_SET(
             "messages.cmd.eco.set",
             "%PREFIX% Du hast den Kontostand %PLAYER% auf %CURRENCY% gesetzt.",
-            ""
+            "%PREFIX% You have set the account balance of %PLAYER% to %CURRENCY%."
     ),
     MESSAGE_CMD_ECO_GIVE(
             "messages.cmd.eco.give",
             "%PREFIX% Du hast %PLAYER% einen Betrag in Höhe von %CURRENCY% hinzugefügt.",
-            ""
+            "%PREFIX% You have added an amount of %CURRENCY% to %PLAYER%."
     ),;
 
 
