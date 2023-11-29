@@ -34,7 +34,7 @@ public class NextGenEconomy extends JavaPlugin {
 
         setupConfig();
         applicationContext =
-                new SpringApplicationBuilder(NetGenEconomySpringBoot.class)
+                new SpringApplicationBuilder(NextGenEconomySpringBoot.class)
                         .bannerMode(Banner.Mode.OFF)
                         .properties(loadConfig())
                         .initializers(appContext -> appContext.setClassLoader(getClassLoader()))
