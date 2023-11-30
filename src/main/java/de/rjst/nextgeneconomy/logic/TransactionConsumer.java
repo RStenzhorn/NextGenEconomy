@@ -25,7 +25,7 @@ public class TransactionConsumer implements Consumer<Transaction> {
 
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public synchronized void accept(final Transaction transaction) {
+    public void accept(final Transaction transaction) {
         final UUID uuid = transaction.getTarget();
         final TransactionType type = transaction.getType();
         final BigDecimal diffCurrency = transaction.getCurrency();
