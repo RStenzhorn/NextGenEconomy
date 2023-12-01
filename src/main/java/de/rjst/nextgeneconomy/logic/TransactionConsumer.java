@@ -24,7 +24,7 @@ public class TransactionConsumer implements Consumer<Transaction> {
     private final EconomyPlayerRepository economyPlayerRepository;
 
     @Override
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public void accept(final Transaction transaction) {
         final UUID uuid = transaction.getTarget();
         final TransactionType type = transaction.getType();

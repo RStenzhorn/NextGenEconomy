@@ -52,6 +52,7 @@ public class NgeMessageUtil {
         COLOR_MAP.put("&e", "<#FFFF55>");
         COLOR_MAP.put("&f", "<#FFFFFF>");
         COLOR_MAP.put("&r", "<reset>");
+        COLOR_MAP.put("&l", "<bold>");
     }
 
     private String replaceLegacyColors(final String message) {
