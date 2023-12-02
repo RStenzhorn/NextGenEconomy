@@ -35,24 +35,29 @@ public class NgeMessageUtil {
 
     static {
         COLOR_MAP = new HashMap<>();
-        COLOR_MAP.put("&0", "<#000000>");
-        COLOR_MAP.put("&1", "<#0000AA>");
-        COLOR_MAP.put("&2", "<#00AA00>");
-        COLOR_MAP.put("&3", "<#00AAAA>");
-        COLOR_MAP.put("&4", "<#AA0000>");
-        COLOR_MAP.put("&5", "<#AA00AA>");
-        COLOR_MAP.put("&6", "<#FFAA00>");
-        COLOR_MAP.put("&7", "<#AAAAAA>");
-        COLOR_MAP.put("&8", "<#555555>");
-        COLOR_MAP.put("&9", "<#5555FF>");
-        COLOR_MAP.put("&a", "<#55FF55>");
-        COLOR_MAP.put("&b", "<#55FFFF>");
-        COLOR_MAP.put("&c", "<#FF5555>");
-        COLOR_MAP.put("&d", "<#FF55FF>");
-        COLOR_MAP.put("&e", "<#FFFF55>");
-        COLOR_MAP.put("&f", "<#FFFFFF>");
+        COLOR_MAP.put("&0", "<black>");
+        COLOR_MAP.put("&1", "<dark_blue>");
+        COLOR_MAP.put("&2", "<dark_green>");
+        COLOR_MAP.put("&3", "<dark_aqua>");
+        COLOR_MAP.put("&4", "<dark_red>");
+        COLOR_MAP.put("&5", "<dark_purple>");
+        COLOR_MAP.put("&6", "<gold>");
+        COLOR_MAP.put("&7", "<gray>");
+        COLOR_MAP.put("&8", "<dark_gray>");
+        COLOR_MAP.put("&9", "<blue>");
+        COLOR_MAP.put("&a", "<green>");
+        COLOR_MAP.put("&b", "<aqua>");
+        COLOR_MAP.put("&c", "<red>");
+        COLOR_MAP.put("&d", "<light_purple>");
+        COLOR_MAP.put("&e", "<yellow>");
+        COLOR_MAP.put("&f", "<white>");
+
         COLOR_MAP.put("&r", "<reset>");
         COLOR_MAP.put("&l", "<bold>");
+        COLOR_MAP.put("&o", "<italic>");
+        COLOR_MAP.put("&n", "<underlined>");
+        COLOR_MAP.put("&m", "<strikethrough>");
+        COLOR_MAP.put("&k", "<obfuscated>");
     }
 
     private String replaceLegacyColors(final String message) {

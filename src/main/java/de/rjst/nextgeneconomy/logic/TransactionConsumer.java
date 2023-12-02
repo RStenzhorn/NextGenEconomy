@@ -7,16 +7,19 @@ import de.rjst.nextgeneconomy.exception.NotEnoughCurrencyException;
 import de.rjst.nextgeneconomy.model.Transaction;
 import de.rjst.nextgeneconomy.model.TransactionType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Map;
+import java.math.RoundingMode;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service("transactionConsumer")
 public class TransactionConsumer implements Consumer<Transaction> {
@@ -25,29 +28,33 @@ public class TransactionConsumer implements Consumer<Transaction> {
 
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    public void accept(final Transaction transaction) {
+    public void accept(final @NotNull Transaction transaction) {
         final UUID uuid = transaction.getTarget();
         final TransactionType type = transaction.getType();
-        final BigDecimal diffCurrency = transaction.getCurrency();
+        final BigDecimal diffCurrency = transaction.getCurrency().setScale(2, RoundingMode.FLOOR);
 
-        final EconomyPlayerUnit player = economyPlayerRepository.findById(uuid)
-                .orElseThrow(() -> new EconomyPlayerNotFoundException(String.format("UUID: %s not found", uuid)));
+        final Optional<EconomyPlayerUnit> playerUnitOptional = economyPlayerRepository.findById(uuid);
+        if (playerUnitOptional.isPresent()) {
+            final EconomyPlayerUnit player = playerUnitOptional.get();
+            final BigDecimal currentBalance = player.getBalance();
+            final BigDecimal result;
 
-        final BigDecimal currentBalance = player.getBalance();
-        final BigDecimal result;
-
-        if (type == TransactionType.ADD) {
-            result = currentBalance.add(diffCurrency);
-        } else if (type == TransactionType.REMOVE){
-            if (currentBalance.compareTo(diffCurrency) >= 0) {
-                result = currentBalance.subtract(diffCurrency);
+            if (type == TransactionType.ADD) {
+                result = currentBalance.add(diffCurrency);
+            } else if (type == TransactionType.REMOVE) {
+                if (currentBalance.compareTo(diffCurrency) >= 0) {
+                    result = currentBalance.subtract(diffCurrency);
+                } else {
+                    throw new NotEnoughCurrencyException(String.format("UUID: %s not enough currency", uuid));
+                }
             } else {
-                throw new NotEnoughCurrencyException(String.format("UUID: %s not found", uuid));
+                result = diffCurrency;
             }
+            player.setBalance(result);
+            economyPlayerRepository.saveAndFlush(player);
         } else {
-            result = diffCurrency;
+            throw new EconomyPlayerNotFoundException(String.format("UUID: %s not found", uuid));
         }
-        player.setBalance(result);
-        economyPlayerRepository.save(player);
+
     }
 }
