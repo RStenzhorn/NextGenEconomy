@@ -25,6 +25,7 @@ public enum NgeSetting {
     START_BALANCE("start.balance", "0"),
     BALANCE_TOP_PAGE_SIZE("balanceTop.pageSize", "10"),
     BALANCE_TOP_REFRESH("balanceTop.refresh", "15"),
+    BALANCE_REFRESH("balance.refresh", "60"),
     CURRENCY_SYMBOL("currency.symbol","€"),
     CURRENCY_SINGULAR("currency.singular", "Euro"),
     CURRENCY_PLURAL("currency.plural", "Euros"),

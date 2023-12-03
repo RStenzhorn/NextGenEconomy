@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 
 @Slf4j
@@ -30,6 +31,7 @@ public class NextGenEconomyApiImpl implements NextGenEconomyApi {
 
     private final EconomyPlayerRepository economyPlayerRepository;
     private final Consumer<Transaction> transactionConsumer;
+    private final Function<UUID, Optional<BigDecimal>> balanceSupplier;
 
     private final PropertySupplier propertySupplier;
 
@@ -54,14 +56,7 @@ public class NextGenEconomyApiImpl implements NextGenEconomyApi {
 
     @Override
     public Optional<BigDecimal> getBalance(final UUID uuid) {
-        BigDecimal result = null;
-        final Optional<EconomyPlayerUnit> unitOptional = economyPlayerRepository.findById(uuid);
-        if (unitOptional.isPresent()) {
-            final EconomyPlayerUnit unit = unitOptional.get();
-            result = unit.getBalance();
-        }
-
-        return Optional.ofNullable(result);
+        return balanceSupplier.apply(uuid);
     }
 
     @Override

@@ -9,6 +9,8 @@ import de.rjst.nextgeneconomy.model.TransactionType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +29,8 @@ public class TransactionConsumer implements Consumer<Transaction> {
     private final EconomyPlayerRepository economyPlayerRepository;
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @CacheEvict(value = "balance", key = "#transaction.target")
+    @Transactional(isolation = Isolation.READ_COMMITTED, timeout = 10)
     public void accept(final @NotNull Transaction transaction) {
         final UUID uuid = transaction.getTarget();
         final TransactionType type = transaction.getType();
