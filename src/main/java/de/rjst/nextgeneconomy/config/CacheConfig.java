@@ -34,10 +34,10 @@ public class CacheConfig {
 
     @Bean
     public Cache balanceCache() {
-        final Integer balanceTopRefresh = propertySupplier.apply(NgeSetting.BALANCE_REFRESH, Integer.class);
+        final Integer balanceRefresh = propertySupplier.apply(NgeSetting.BALANCE_REFRESH, Integer.class);
         return new CaffeineCache("balance",
                 Caffeine.newBuilder()
-                        .expireAfterAccess(balanceTopRefresh, TimeUnit.MINUTES)
+                        .expireAfterAccess(balanceRefresh, TimeUnit.MINUTES)
                         .build());
     }
 
