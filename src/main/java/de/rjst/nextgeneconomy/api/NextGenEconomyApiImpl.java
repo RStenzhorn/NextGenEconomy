@@ -47,7 +47,7 @@ public class NextGenEconomyApiImpl implements NextGenEconomyApi {
         if (unitOptional.isEmpty()) {
             final EconomyPlayerUnit unit = new EconomyPlayerUnit();
             unit.setId(uuid);
-            unit.setBalance(propertySupplier.apply(NgeSetting.START_BALANCE, BigDecimal.class));
+            unit.setBalance(BigDecimal.valueOf(propertySupplier.apply(NgeSetting.START_BALANCE, Double.class)));
             economyPlayerRepository.save(unit);
             result = true;
         }
