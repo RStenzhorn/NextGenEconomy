@@ -9,11 +9,11 @@ import lombok.RequiredArgsConstructor;
 public enum NgeSetting {
 
     DB_DRIVER_CLASS("spring.datasource.driver-class-name","org.mariadb.jdbc.Driver"),
-    DB_URL("spring.datasource.url","jdbc:mariadb://ip:3306/port"),
+    DB_URL("spring.datasource.url","jdbc:mariadb://ip:port/databaseName"),
     DB_USER("spring.datasource.username","root"),
     DB_PASSWORD("spring.datasource.password","password"),
     DB_DDL_AUTO("spring.jpa.hibernate.ddl-auto","update"),
-    DB_SHOW_SQL("spring.jpa.show-sql","true"),
+    DB_SHOW_SQL("spring.jpa.show-sql","false"),
     DB_HIKARI_AUTO_COMMIT("spring.datasource.hikari.autoCommit","true"),
     DB_HIKARI_CONNECTION_TIMEOUT("spring.datasource.hikari.connectionTimeout","30000"),
     DB_HIKARI_IDLE_TIMEOUT("spring.datasource.hikari.idleTimeout","600000"),

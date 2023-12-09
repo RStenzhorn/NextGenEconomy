@@ -14,14 +14,36 @@ v1.0, {docdate}
 toc::[Inhaltsverzeichnis]
 
 == Einleitung
+Das Plugin NextGenEconomy ist ein PaperMc-Plugin, das die grundlegenden Funktionen von Vault implementiert,
+um ein Wirtschaftsystem auf dem Server zu ermöglichen.
 
 == Voraussetzungen
+=== Pflicht
+
+* https://papermc.io/downloads/paper[PaperMC Server]
+* https://www.spigotmc.org/resources/vault.34315/[Vault] Version 1.7.3
+
+=== Optionale (Empfehlung)
+
+* MariaDB
 
 == Installation
 
 === Installationsschritte
 
+* Plugin herunterladen und in den Plugins Ordner ziehen
+* Server neustarten
+* Konfiguration entsprechend anpassen (siehe 3.2)
+* Berechtigungen setzen
+* Server neustarten
+
 === Konfiguration
+In dem plugins/NextGenEconomy befindet sich die Datei "config.yml".
+[source,yaml,highlight="dark"]
+----
+include::default.yml[]
+----
+
 
 == Funktionen
 
@@ -34,8 +56,3 @@ toc::[Inhaltsverzeichnis]
 === Zukünftige Features
 
 == FAQ
-
-== Lizenz
-
-Gib an, unter welcher Lizenz dein Plugin veröffentlicht ist.
-
