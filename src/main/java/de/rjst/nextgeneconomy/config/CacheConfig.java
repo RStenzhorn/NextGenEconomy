@@ -42,9 +42,9 @@ public class CacheConfig {
     }
 
     @Bean
-    public CacheManager cacheManager(final Cache balanceTopCache, final Cache balanceCache) {
+    public CacheManager cacheManager(final List<Cache> caches) {
         final SimpleCacheManager simpleCacheManager = new SimpleCacheManager();
-        simpleCacheManager.setCaches(List.of(balanceTopCache, balanceCache));
+        simpleCacheManager.setCaches(caches);
         return simpleCacheManager;
     }
 

@@ -15,6 +15,8 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.sql.SQLTimeoutException;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Map;
@@ -70,8 +72,8 @@ public class NextGenEconomyApiImpl implements NextGenEconomyApi {
         try {
             transactionConsumer.accept(transaction);
             result = true;
-        } catch (final RuntimeException ex) {
-            log.warn("Transaction {} failed: {}", transaction, ex.getMessage());
+        } catch (final Exception ex) {
+            log.warn("Transaction {} failed", transaction, ex);
             result = false;
         }
         return result;
@@ -89,8 +91,8 @@ public class NextGenEconomyApiImpl implements NextGenEconomyApi {
         try {
             transactionConsumer.accept(transaction);
             result = true;
-        } catch (final RuntimeException ex) {
-            log.warn("Transaction {} failed: {}", transaction, ex.getMessage());
+        } catch (final Exception ex) {
+            log.warn("Transaction {} failed", transaction, ex);
             result = false;
         }
         return result;
@@ -107,8 +109,8 @@ public class NextGenEconomyApiImpl implements NextGenEconomyApi {
         try {
             transactionConsumer.accept(transaction);
             result = true;
-        } catch (final RuntimeException ex) {
-            log.warn("Transaction {} failed: {}", transaction, ex.getMessage());
+        } catch (final Exception ex) {
+            log.warn("Transaction {} failed", transaction, ex);
             result = false;
         }
         return result;
