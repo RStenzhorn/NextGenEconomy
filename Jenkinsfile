@@ -4,6 +4,7 @@ pipeline {
     }
     parameters {
         booleanParam(name: 'RELEASE', defaultValue: false, description: '')
+        booleanParam(name: 'ARTIFACTORY', defaultValue: false, description: '')
         string(name: 'VERSION', defaultValue: '', description: '')
     }
     environment {
@@ -29,7 +30,7 @@ pipeline {
         spec:
           containers:
           - name: maven
-            image: maven:3.9.5-eclipse-temurin-17
+            image: maven:3.8.5-openjdk-17
             command: ["cat"]
             tty: true
             volumeMounts:
@@ -135,7 +136,7 @@ pipeline {
         stage('Artifactory: UPLOAD') {
             when {
                 expression {
-                    !params.RELEASE && !VERSION.contains("SNAPSHOT")
+                    !params.RELEASE && params.ARTIFACTORY
                 }
             }
             steps {
@@ -164,11 +165,10 @@ pipeline {
             }
             steps {
                 script {
-                    if (!VERSION.contains("SNAPSHOT")) {
-                        def mdContent = readFile('release-notes.md')
-                        mdContent = mdContent.replaceAll("\n", "\\\\n")
-                        withCredentials([string(credentialsId: 'gitRelease', variable: 'TOKEN')]) {
-                            def curlCommand = """
+                    def mdContent = readFile('release-notes.md')
+                    mdContent = mdContent.replaceAll("\n", "\\\\n")
+                    withCredentials([string(credentialsId: 'gitRelease', variable: 'TOKEN')]) {
+                        def curlCommand = """
                                 curl -L \
                                     -X POST \
                                     -H 'Accept: application/vnd.github+json' \
@@ -186,16 +186,15 @@ pipeline {
                                     }'
                             """
 
-                            def result = sh(script: curlCommand, returnStdout: true)
-                            echo "${result}"
-                            def json = readJSON(text: result)
-                            def releaseId = json.id
+                        def result = sh(script: curlCommand, returnStdout: true)
+                        echo "${result}"
+                        def json = readJSON(text: result)
+                        def releaseId = json.id
 
-                            def uploadUrl = "https://uploads.github.com/repos/${REPO_PATH}/${NAME}/releases/${releaseId}/assets?name=${NAME}.jar"
-                            def uploadCommand = "curl -L -H 'Authorization: Bearer $TOKEN' -H 'Content-Type: application/zip' --data-binary @target/${NAME}.jar ${uploadUrl}"
-                            def resultUpload = sh(script: uploadCommand, returnStdout: true)
-                            echo "${resultUpload}"
-                        }
+                        def uploadUrl = "https://uploads.github.com/repos/${REPO_PATH}/${NAME}/releases/${releaseId}/assets?name=${NAME}.jar"
+                        def uploadCommand = "curl -L -H 'Authorization: Bearer $TOKEN' -H 'Content-Type: application/zip' --data-binary @target/${NAME}.jar ${uploadUrl}"
+                        def resultUpload = sh(script: uploadCommand, returnStdout: true)
+                        echo "${resultUpload}"
                     }
                 }
             }

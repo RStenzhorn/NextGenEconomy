@@ -15,12 +15,15 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.sql.SQLTimeoutException;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 
 @Slf4j
@@ -30,6 +33,7 @@ public class NextGenEconomyApiImpl implements NextGenEconomyApi {
 
     private final EconomyPlayerRepository economyPlayerRepository;
     private final Consumer<Transaction> transactionConsumer;
+    private final Function<UUID, Optional<BigDecimal>> balanceSupplier;
 
     private final PropertySupplier propertySupplier;
 
@@ -45,7 +49,7 @@ public class NextGenEconomyApiImpl implements NextGenEconomyApi {
         if (unitOptional.isEmpty()) {
             final EconomyPlayerUnit unit = new EconomyPlayerUnit();
             unit.setId(uuid);
-            unit.setBalance(BigDecimal.ZERO);
+            unit.setBalance(propertySupplier.apply(NgeSetting.START_BALANCE, BigDecimal.class));
             economyPlayerRepository.save(unit);
             result = true;
         }
@@ -54,14 +58,7 @@ public class NextGenEconomyApiImpl implements NextGenEconomyApi {
 
     @Override
     public Optional<BigDecimal> getBalance(final UUID uuid) {
-        BigDecimal result = null;
-        final Optional<EconomyPlayerUnit> unitOptional = economyPlayerRepository.findById(uuid);
-        if (unitOptional.isPresent()) {
-            final EconomyPlayerUnit unit = unitOptional.get();
-            result = unit.getBalance();
-        }
-
-        return Optional.ofNullable(result);
+        return balanceSupplier.apply(uuid);
     }
 
     @Override
@@ -75,8 +72,8 @@ public class NextGenEconomyApiImpl implements NextGenEconomyApi {
         try {
             transactionConsumer.accept(transaction);
             result = true;
-        } catch (final RuntimeException ex) {
-            log.warn("Transaction {} failed: {}", transaction, ex.getMessage());
+        } catch (final Exception ex) {
+            log.warn("Transaction {} failed", transaction, ex);
             result = false;
         }
         return result;
@@ -94,8 +91,8 @@ public class NextGenEconomyApiImpl implements NextGenEconomyApi {
         try {
             transactionConsumer.accept(transaction);
             result = true;
-        } catch (final RuntimeException ex) {
-            log.warn("Transaction {} failed: {}", transaction, ex.getMessage());
+        } catch (final Exception ex) {
+            log.warn("Transaction {} failed", transaction, ex);
             result = false;
         }
         return result;
@@ -112,8 +109,8 @@ public class NextGenEconomyApiImpl implements NextGenEconomyApi {
         try {
             transactionConsumer.accept(transaction);
             result = true;
-        } catch (final RuntimeException ex) {
-            log.warn("Transaction {} failed: {}", transaction, ex.getMessage());
+        } catch (final Exception ex) {
+            log.warn("Transaction {} failed", transaction, ex);
             result = false;
         }
         return result;

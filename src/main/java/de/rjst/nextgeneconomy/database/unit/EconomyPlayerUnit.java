@@ -18,7 +18,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "player")
+@Table(name = "economy_player")
 public class EconomyPlayerUnit {
 
     @Id

@@ -2,17 +2,15 @@ package de.rjst.nextgeneconomy.command;
 
 import de.rjst.nextgeneconomy.api.NextGenEconomyApi;
 import de.rjst.nextgeneconomy.config.bean.PluginCommand;
-import de.rjst.nextgeneconomy.database.repository.EconomyPlayerRepository;
 import de.rjst.nextgeneconomy.database.unit.EconomyPlayerUnit;
-import de.rjst.nextgeneconomy.logic.config.PropertySupplier;
 import de.rjst.nextgeneconomy.model.MessageRequest;
 import de.rjst.nextgeneconomy.model.MessageRequestImpl;
 import de.rjst.nextgeneconomy.setting.NgeMessage;
 import de.rjst.nextgeneconomy.setting.NgePermission;
-import de.rjst.nextgeneconomy.setting.NgeSetting;
 import de.rjst.nextgeneconomy.setting.Placeholder;
 import de.rjst.nextgeneconomy.util.NgeUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -23,8 +21,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -35,17 +32,17 @@ import java.util.Optional;
 import java.util.function.Function;
 
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 @PluginCommand("balancetop")
 public class BalanceTopCommand implements CommandExecutor {
 
-    private static final String SORT_FIELD = "balance";
-
     private final NextGenEconomyApi nextGenEconomyApi;
-    private final EconomyPlayerRepository economyPlayerRepository;
+    private static final String FIRST_PAGE_NUMBER = "1";
 
-    private final PropertySupplier propertySupplier;
+    @Qualifier("balanceTopSupplier")
+    private final Function<Integer, Page<EconomyPlayerUnit>> balanceTopSupplier;
 
     @Qualifier("componentSupplier")
     private final Function<MessageRequest, net.kyori.adventure.text.Component> componentSupplier;
@@ -59,33 +56,23 @@ public class BalanceTopCommand implements CommandExecutor {
             final Locale locale = player.locale();
             if (NgeUtil.isPlayerPermitted(player, NgePermission.CMD_BALANCE_TOP)) {
                 if (args.length == 0) {
-                    final int pageNumber = 0;
-
-                    final int size = propertySupplier.apply(NgeSetting.BALANCE_TOP_PAGE_SIZE, Integer.class);
-                    final Sort sort = Sort.by(SORT_FIELD).descending();
-                    final PageRequest pageable = PageRequest.of(pageNumber, size, sort);
-                    final Page<EconomyPlayerUnit> page = economyPlayerRepository.findAll(pageable);
-
+                    final Page<EconomyPlayerUnit> page = balanceTopSupplier.apply(0);
                     sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
                             .placeholders(Map.of(
-                                    Placeholder.PAGE, "1",
+                                    Placeholder.PAGE, FIRST_PAGE_NUMBER,
                                     Placeholder.MAX_PAGE, String.valueOf(page.getTotalPages())
                             ))
                             .locale(locale)
                             .ngeMessage(NgeMessage.MESSAGE_CMD_BALANCE_TOP_HEADER).build()));
-
-                    sendPageMessage(sender, locale, pageNumber, size, page);
+                    sendPageMessage(sender, locale, 0, page);
                 } else if (args.length == 1) {
                     final Optional<Integer> optionalPageNumber = NgeUtil.getPageNumber(args[0]);
                     if (optionalPageNumber.isPresent()) {
-                        int pageNumber = optionalPageNumber.get();
+                        Integer pageNumber = optionalPageNumber.get();
                         final int pageShow = pageNumber;
                         pageNumber--;
 
-                        final int size = propertySupplier.apply(NgeSetting.BALANCE_TOP_PAGE_SIZE, Integer.class);
-                        final Sort sort = Sort.by(SORT_FIELD).descending();
-                        final PageRequest pageable = PageRequest.of(pageNumber, size, sort);
-                        final Page<EconomyPlayerUnit> page = economyPlayerRepository.findAll(pageable);
+                        final Page<EconomyPlayerUnit> page = balanceTopSupplier.apply(pageNumber);
                         final int totalPages = page.getTotalPages();
                         if (pageShow <= totalPages) {
                             sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
@@ -95,7 +82,7 @@ public class BalanceTopCommand implements CommandExecutor {
                                     ))
                                     .locale(locale)
                                     .ngeMessage(NgeMessage.MESSAGE_CMD_BALANCE_TOP_HEADER).build()));
-                            sendPageMessage(sender, locale, pageNumber, size, page);
+                            sendPageMessage(sender, locale, pageNumber, page);
                         } else {
                             sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
                                     .locale(locale)
@@ -123,20 +110,21 @@ public class BalanceTopCommand implements CommandExecutor {
         return true;
     }
 
-    private void sendPageMessage(@NotNull final CommandSender sender, final Locale locale, final int pageNumber, final int size, final @NotNull Page<EconomyPlayerUnit> page) {
-        int rank = getRank(pageNumber, size);
+    private void sendPageMessage(@NotNull final Audience sender, final Locale locale, final int pageNumber, final @NotNull Slice<EconomyPlayerUnit> page) {
+        int rank = getRank(pageNumber, page.getSize());
 
         for (final EconomyPlayerUnit unit : page) {
             final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(unit.getId());
             final BigDecimal balance = unit.getBalance();
-
-            sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
-                    .placeholders(Map.of(
-                            Placeholder.POSITION, String.valueOf(rank),
-                            Placeholder.PLAYER, Objects.requireNonNull(offlinePlayer.getName()),
-                            Placeholder.CURRENCY, nextGenEconomyApi.format(balance)))
-                    .locale(locale)
-                    .ngeMessage(NgeMessage.MESSAGE_CMD_BALANCE_TOP).build()));
+            if (offlinePlayer.hasPlayedBefore()) {
+                sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
+                        .placeholders(Map.of(
+                                Placeholder.POSITION, String.valueOf(rank),
+                                Placeholder.PLAYER, Objects.requireNonNull(offlinePlayer.getName()),
+                                Placeholder.CURRENCY, nextGenEconomyApi.format(balance)))
+                        .locale(locale)
+                        .ngeMessage(NgeMessage.MESSAGE_CMD_BALANCE_TOP).build()));
+            }
             rank++;
         }
     }
