@@ -19,7 +19,5 @@ public enum NgePermission {
 
     NgePermission(final String perm) {
         permission = new Permission(perm);
-        final PluginManager pluginManager = Bukkit.getPluginManager();
-        pluginManager.addPermission(permission);
     }
 }

@@ -7,7 +7,7 @@ import de.rjst.nextgeneconomy.model.MessageRequest;
 import de.rjst.nextgeneconomy.model.MessageRequestImpl;
 import de.rjst.nextgeneconomy.setting.NgeMessage;
 import de.rjst.nextgeneconomy.setting.NgePermission;
-import de.rjst.nextgeneconomy.setting.Placeholder;
+import de.rjst.nextgeneconomy.setting.NgePlaceholder;
 import de.rjst.nextgeneconomy.util.NgeUtil;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
@@ -53,7 +53,7 @@ public class BalanceCommand implements CommandExecutor {
                             final BigDecimal balance = optionalBalance.get();
                             sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
                                     .placeholders(Map.of(
-                                            Placeholder.CURRENCY, nextGenEconomyApi.format(balance)))
+                                            NgePlaceholder.CURRENCY, nextGenEconomyApi.format(balance)))
                                     .locale(locale)
                                     .ngeMessage(NgeMessage.MESSAGE_CMD_BALANCE).build()));
                         }
@@ -73,8 +73,8 @@ public class BalanceCommand implements CommandExecutor {
                             final String playerName = Objects.requireNonNull(offlinePlayer.getName());
                             sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
                                     .placeholders(Map.of(
-                                            Placeholder.PLAYER, playerName,
-                                            Placeholder.CURRENCY, nextGenEconomyApi.format(balance)))
+                                            NgePlaceholder.PLAYER, playerName,
+                                            NgePlaceholder.CURRENCY, nextGenEconomyApi.format(balance)))
                                     .locale(locale)
                                     .ngeMessage(NgeMessage.MESSAGE_CMD_BALANCE_OTHER).build()));
                         } else {

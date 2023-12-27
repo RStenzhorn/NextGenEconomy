@@ -4,9 +4,11 @@ import de.rjst.nextgeneconomy.setting.NgeMessage;
 import de.rjst.nextgeneconomy.setting.NgeSetting;
 import lombok.Getter;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.FileConfigurationOptions;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.boot.Banner;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -64,14 +66,14 @@ public class NextGenEconomy extends JavaPlugin {
         saveConfig();
     }
 
-    private static void setupMessageConfig(final Configuration config) {
+    private static void setupMessageConfig(final ConfigurationSection config) {
         for (final NgeMessage message : NgeMessage.values()) {
             config.addDefault(message.getPath(Locale.ENGLISH), message.getEnglish());
             config.addDefault(message.getPath(Locale.GERMAN), message.getGerman());
         }
     }
 
-    private Map<String, Object> loadConfig() {
+    private @NotNull Map<String, Object> loadConfig() {
         final YamlPropertiesFactoryBean yamlFactory = new YamlPropertiesFactoryBean();
         yamlFactory.setResources(new FileSystemResource(new File(getDataFolder(), "config.yml")));
         final var properties = yamlFactory.getObject();

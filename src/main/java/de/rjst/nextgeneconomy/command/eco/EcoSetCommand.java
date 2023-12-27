@@ -5,9 +5,8 @@ import de.rjst.nextgeneconomy.model.EcoCommandRequest;
 import de.rjst.nextgeneconomy.model.MessageRequest;
 import de.rjst.nextgeneconomy.model.MessageRequestImpl;
 import de.rjst.nextgeneconomy.setting.NgeMessage;
-import de.rjst.nextgeneconomy.setting.Placeholder;
+import de.rjst.nextgeneconomy.setting.NgePlaceholder;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -20,7 +19,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 
@@ -45,8 +43,8 @@ public class EcoSetCommand implements EcoCommandExecutor{
         if (nextGenEconomyApi.setBalance(target, currency)) {
             sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
                     .placeholders(Map.of(
-                            Placeholder.PLAYER, Objects.requireNonNull(offlinePlayer.getName()),
-                            Placeholder.CURRENCY, nextGenEconomyApi.format(currency)))
+                            NgePlaceholder.PLAYER, Objects.requireNonNull(offlinePlayer.getName()),
+                            NgePlaceholder.CURRENCY, nextGenEconomyApi.format(currency)))
                     .locale(locale)
                     .ngeMessage(NgeMessage.MESSAGE_CMD_ECO_SET).build()));
         } else {

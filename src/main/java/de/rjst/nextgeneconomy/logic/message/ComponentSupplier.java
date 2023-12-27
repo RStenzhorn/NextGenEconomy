@@ -22,7 +22,7 @@ public class ComponentSupplier implements Function<MessageRequest, Component> {
     private final BiFunction<NgeMessage, Locale, String> messageSupplier;
 
     @Override
-    public Component apply(final @NotNull MessageRequest request) {
+    public final @NotNull Component apply(final @NotNull MessageRequest request) {
         final Locale locale = request.getLocale() == null ? Locale.getDefault() : request.getLocale();
         final String baseMessage = messageSupplier.apply(request.getNgeMessage(), locale);
         final String message = NgeMessageUtil.getMessage(baseMessage,

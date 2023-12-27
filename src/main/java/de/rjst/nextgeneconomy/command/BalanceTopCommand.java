@@ -7,7 +7,7 @@ import de.rjst.nextgeneconomy.model.MessageRequest;
 import de.rjst.nextgeneconomy.model.MessageRequestImpl;
 import de.rjst.nextgeneconomy.setting.NgeMessage;
 import de.rjst.nextgeneconomy.setting.NgePermission;
-import de.rjst.nextgeneconomy.setting.Placeholder;
+import de.rjst.nextgeneconomy.setting.NgePlaceholder;
 import de.rjst.nextgeneconomy.util.NgeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,8 +59,8 @@ public class BalanceTopCommand implements CommandExecutor {
                     final Page<EconomyPlayerUnit> page = balanceTopSupplier.apply(0);
                     sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
                             .placeholders(Map.of(
-                                    Placeholder.PAGE, FIRST_PAGE_NUMBER,
-                                    Placeholder.MAX_PAGE, String.valueOf(page.getTotalPages())
+                                    NgePlaceholder.PAGE, FIRST_PAGE_NUMBER,
+                                    NgePlaceholder.MAX_PAGE, String.valueOf(page.getTotalPages())
                             ))
                             .locale(locale)
                             .ngeMessage(NgeMessage.MESSAGE_CMD_BALANCE_TOP_HEADER).build()));
@@ -77,8 +77,8 @@ public class BalanceTopCommand implements CommandExecutor {
                         if (pageShow <= totalPages) {
                             sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
                                     .placeholders(Map.of(
-                                            Placeholder.PAGE, String.valueOf(pageShow),
-                                            Placeholder.MAX_PAGE, String.valueOf(totalPages)
+                                            NgePlaceholder.PAGE, String.valueOf(pageShow),
+                                            NgePlaceholder.MAX_PAGE, String.valueOf(totalPages)
                                     ))
                                     .locale(locale)
                                     .ngeMessage(NgeMessage.MESSAGE_CMD_BALANCE_TOP_HEADER).build()));
@@ -119,9 +119,9 @@ public class BalanceTopCommand implements CommandExecutor {
             if (offlinePlayer.hasPlayedBefore()) {
                 sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
                         .placeholders(Map.of(
-                                Placeholder.POSITION, String.valueOf(rank),
-                                Placeholder.PLAYER, Objects.requireNonNull(offlinePlayer.getName()),
-                                Placeholder.CURRENCY, nextGenEconomyApi.format(balance)))
+                                NgePlaceholder.POSITION, String.valueOf(rank),
+                                NgePlaceholder.PLAYER, Objects.requireNonNull(offlinePlayer.getName()),
+                                NgePlaceholder.CURRENCY, nextGenEconomyApi.format(balance)))
                         .locale(locale)
                         .ngeMessage(NgeMessage.MESSAGE_CMD_BALANCE_TOP).build()));
             }

@@ -21,6 +21,7 @@ public class BalanceSupplier implements Function<UUID, Optional<BigDecimal>> {
     @Override
     public Optional<BigDecimal> apply(final UUID uuid) {
         BigDecimal result = null;
+
         final Optional<EconomyPlayerUnit> unitOptional = economyPlayerRepository.findById(uuid);
         if (unitOptional.isPresent()) {
             final EconomyPlayerUnit unit = unitOptional.get();

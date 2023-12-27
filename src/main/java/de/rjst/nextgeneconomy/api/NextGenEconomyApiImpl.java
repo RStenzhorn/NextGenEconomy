@@ -2,12 +2,14 @@ package de.rjst.nextgeneconomy.api;
 
 import de.rjst.nextgeneconomy.database.repository.EconomyPlayerRepository;
 import de.rjst.nextgeneconomy.database.unit.EconomyPlayerUnit;
+import de.rjst.nextgeneconomy.exception.EconomyPlayerNotFoundException;
+import de.rjst.nextgeneconomy.exception.NotEnoughCurrencyException;
 import de.rjst.nextgeneconomy.logic.config.PropertySupplier;
 import de.rjst.nextgeneconomy.model.Transaction;
 import de.rjst.nextgeneconomy.model.TransactionImpl;
 import de.rjst.nextgeneconomy.model.TransactionType;
 import de.rjst.nextgeneconomy.setting.NgeSetting;
-import de.rjst.nextgeneconomy.setting.Placeholder;
+import de.rjst.nextgeneconomy.setting.NgePlaceholder;
 import de.rjst.nextgeneconomy.util.NgeMessageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
-import java.sql.SQLTimeoutException;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Map;
@@ -72,8 +72,11 @@ public class NextGenEconomyApiImpl implements NextGenEconomyApi {
         try {
             transactionConsumer.accept(transaction);
             result = true;
-        } catch (final Exception ex) {
-            log.warn("Transaction {} failed", transaction, ex);
+        } catch (final NotEnoughCurrencyException | EconomyPlayerNotFoundException ex) {
+            log.warn("Transaction: {}", transaction);
+            result = false;
+        } catch (final RuntimeException ex) {
+            log.error("Transaction: {}", transaction);
             result = false;
         }
         return result;
@@ -91,8 +94,11 @@ public class NextGenEconomyApiImpl implements NextGenEconomyApi {
         try {
             transactionConsumer.accept(transaction);
             result = true;
-        } catch (final Exception ex) {
-            log.warn("Transaction {} failed", transaction, ex);
+        } catch (final NotEnoughCurrencyException | EconomyPlayerNotFoundException ex) {
+            log.warn("Transaction: {}", transaction);
+            result = false;
+        } catch (final RuntimeException ex) {
+            log.error("Transaction: {}", transaction);
             result = false;
         }
         return result;
@@ -109,8 +115,11 @@ public class NextGenEconomyApiImpl implements NextGenEconomyApi {
         try {
             transactionConsumer.accept(transaction);
             result = true;
-        } catch (final Exception ex) {
-            log.warn("Transaction {} failed", transaction, ex);
+        } catch (final NotEnoughCurrencyException | EconomyPlayerNotFoundException ex) {
+            log.warn("Transaction: {}", transaction);
+            result = false;
+        } catch (final RuntimeException ex) {
+            log.error("Transaction: {}", transaction);
             result = false;
         }
         return result;
@@ -120,9 +129,9 @@ public class NextGenEconomyApiImpl implements NextGenEconomyApi {
     public String format(final BigDecimal value) {
         final String baseMessage = propertySupplier.apply(NgeSetting.CURRENCY_FORMAT, String.class);
         return NgeMessageUtil.getMessage(baseMessage, Map.of(
-                Placeholder.LOCALE_FORMAT, getFormattedDecimal(value),
-                Placeholder.CURRENCY_NAME, value.compareTo(BigDecimal.ONE) == 0 ? getCurrencySingular() : getCurrencyPlural(),
-                Placeholder.CURRENCY_SYMBOL, getCurrencySymbol()
+                NgePlaceholder.LOCALE_FORMAT, getFormattedDecimal(value),
+                NgePlaceholder.CURRENCY_NAME, value.compareTo(BigDecimal.ONE) == 0 ? getCurrencySingular() : getCurrencyPlural(),
+                NgePlaceholder.CURRENCY_SYMBOL, getCurrencySymbol()
         ));
     }
 
