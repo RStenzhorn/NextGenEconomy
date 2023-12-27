@@ -46,8 +46,7 @@ public class NgeUtil {
             if (result <= 0) {
                 result = null;
             }
-        } catch (final NumberFormatException ignored) {
-        }
+        } catch (final NumberFormatException ignored) {}
 
         return Optional.ofNullable(result);
     }

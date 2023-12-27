@@ -2,7 +2,7 @@ package de.rjst.nextgeneconomy.logic.config;
 
 import de.rjst.nextgeneconomy.setting.NgeMessage;
 import de.rjst.nextgeneconomy.setting.NgeSetting;
-import de.rjst.nextgeneconomy.setting.Placeholder;
+import de.rjst.nextgeneconomy.setting.NgePlaceholder;
 import de.rjst.nextgeneconomy.util.NgeMessageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ public class MessageSupplier implements BiFunction<NgeMessage, Locale, String> {
         }
 
         result = NgeMessageUtil.getMessage(result, Map.of(
-                Placeholder.PREFIX, propertySupplier.apply(NgeSetting.PREFIX, String.class)
+                NgePlaceholder.PREFIX, propertySupplier.apply(NgeSetting.PREFIX, String.class)
         ));
 
         return result;

@@ -3,7 +3,7 @@ package de.rjst.nextgeneconomy.setting;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class Placeholder {
+public class NgePlaceholder {
 
     public final String LOCALE_FORMAT = "LOCALE_FORMAT";
     public final String CURRENCY_NAME = "CURRENCY_NAME";

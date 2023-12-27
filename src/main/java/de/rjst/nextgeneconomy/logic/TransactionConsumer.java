@@ -10,14 +10,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.SQLException;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -41,7 +39,7 @@ public class TransactionConsumer implements Consumer<Transaction> {
         if (playerUnitOptional.isPresent()) {
             final EconomyPlayerUnit player = playerUnitOptional.get();
             final BigDecimal currentBalance = player.getBalance();
-            final BigDecimal result;
+            BigDecimal result = null;
 
             if (type == TransactionType.ADD) {
                 result = currentBalance.add(diffCurrency);
@@ -51,9 +49,10 @@ public class TransactionConsumer implements Consumer<Transaction> {
                 } else {
                     throw new NotEnoughCurrencyException(String.format("UUID: %s not enough currency", uuid));
                 }
-            } else {
+            } else if (type == TransactionType.SET) {
                 result = diffCurrency;
             }
+
             player.setBalance(result);
             economyPlayerRepository.saveAndFlush(player);
         } else {

@@ -9,6 +9,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.ServicesManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
 public class ExternalLibConfig {
 
     @Bean
-    public ApplicationRunner injectVault(final Server server, final NextGenEconomyApi nextGenEconomyApi, final JavaPlugin plugin) {
+    public ApplicationRunner injectVault(final @NotNull Server server, final NextGenEconomyApi nextGenEconomyApi, final JavaPlugin plugin) {
         final PluginManager pluginManager = server.getPluginManager();
         final ServicesManager servicesManager = server.getServicesManager();
 

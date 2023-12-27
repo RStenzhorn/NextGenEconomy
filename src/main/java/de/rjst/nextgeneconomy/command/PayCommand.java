@@ -7,7 +7,7 @@ import de.rjst.nextgeneconomy.model.MessageRequest;
 import de.rjst.nextgeneconomy.model.MessageRequestImpl;
 import de.rjst.nextgeneconomy.setting.NgeMessage;
 import de.rjst.nextgeneconomy.setting.NgePermission;
-import de.rjst.nextgeneconomy.setting.Placeholder;
+import de.rjst.nextgeneconomy.setting.NgePlaceholder;
 import de.rjst.nextgeneconomy.util.NgeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,16 +61,16 @@ public class PayCommand implements CommandExecutor {
                                     if (nextGenEconomyApi.addBalance(targetUuid, amount)) {
                                         sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
                                                 .placeholders(Map.of(
-                                                        Placeholder.PLAYER, Objects.requireNonNull(offlinePlayer.getName()),
-                                                        Placeholder.CURRENCY, nextGenEconomyApi.format(amount)
+                                                        NgePlaceholder.PLAYER, Objects.requireNonNull(offlinePlayer.getName()),
+                                                        NgePlaceholder.CURRENCY, nextGenEconomyApi.format(amount)
                                                 ))
                                                 .locale(locale)
                                                 .ngeMessage(NgeMessage.MESSAGE_CMD_PAY_SOURCE).build()));
                                         final Optional<Player> onlineTargetPlayer = NgeUtil.getPlayer(targetUuid);
                                         onlineTargetPlayer.ifPresent(value -> value.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
                                                 .placeholders(Map.of(
-                                                        Placeholder.PLAYER, player.getName(),
-                                                        Placeholder.CURRENCY, nextGenEconomyApi.format(amount)
+                                                        NgePlaceholder.PLAYER, player.getName(),
+                                                        NgePlaceholder.CURRENCY, nextGenEconomyApi.format(amount)
                                                 ))
                                                 .locale(locale)
                                                 .ngeMessage(NgeMessage.MESSAGE_CMD_PAY_TARGET).build())));
@@ -83,7 +83,7 @@ public class PayCommand implements CommandExecutor {
                                 } else {
                                     sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
                                             .placeholders(Map.of(
-                                                    Placeholder.CURRENCY_PLURAL, nextGenEconomyApi.getCurrencyPlural()
+                                                    NgePlaceholder.CURRENCY_PLURAL, nextGenEconomyApi.getCurrencyPlural()
                                             ))
                                             .locale(locale)
                                             .ngeMessage(NgeMessage.MESSAGE_ERROR_NOT_ENOUGH).build()));

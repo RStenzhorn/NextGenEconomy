@@ -8,7 +8,7 @@ import de.rjst.nextgeneconomy.model.MessageRequest;
 import de.rjst.nextgeneconomy.model.MessageRequestImpl;
 import de.rjst.nextgeneconomy.setting.NgeMessage;
 import de.rjst.nextgeneconomy.setting.NgePermission;
-import de.rjst.nextgeneconomy.setting.Placeholder;
+import de.rjst.nextgeneconomy.setting.NgePlaceholder;
 import de.rjst.nextgeneconomy.util.NgeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -75,7 +75,7 @@ public class EcoCommand implements CommandExecutor {
                 } else {
                     sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
                             .placeholders(Map.of(
-                                    Placeholder.CURRENCY_PLURAL, nextGenEconomyApi.getCurrencyPlural()
+                                    NgePlaceholder.CURRENCY_PLURAL, nextGenEconomyApi.getCurrencyPlural()
                             ))
                             .locale(locale)
                             .ngeMessage(NgeMessage.MESSAGE_ERROR_INVALID_CURRENCY).build()));
