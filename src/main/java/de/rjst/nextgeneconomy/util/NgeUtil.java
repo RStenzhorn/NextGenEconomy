@@ -3,9 +3,7 @@ package de.rjst.nextgeneconomy.util;
 import de.rjst.nextgeneconomy.setting.NgePermission;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
 import org.jetbrains.annotations.NotNull;
@@ -67,7 +65,7 @@ public class NgeUtil {
     }
 
 
-    public boolean isPlayerPermitted(final Permissible player, final NgePermission ngePermission) {
+    public boolean isPermitted(final Permissible player, final NgePermission ngePermission) {
         return player.hasPermission(ngePermission.getPermission());
     }
 }

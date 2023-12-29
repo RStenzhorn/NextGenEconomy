@@ -48,7 +48,7 @@ public class EcoCommand implements CommandExecutor {
         final Optional<Player> player = NgeUtil.getPlayer(sender);
         locale = player.map(Player::locale).orElseGet(Locale::getDefault);
 
-        if (NgeUtil.isPlayerPermitted(sender, NgePermission.CMD_ECO)) {
+        if (NgeUtil.isPermitted(sender, NgePermission.CMD_ECO)) {
             if (args.length == 3) {
                 final Optional<BigDecimal> optionalCurrency = NgeUtil.getBigDecimal(args[2]);
                 if (optionalCurrency.isPresent()) {

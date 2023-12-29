@@ -12,6 +12,7 @@ import de.rjst.nextgeneconomy.util.NgeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -22,19 +23,20 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 
 @Slf4j
 @RequiredArgsConstructor
-@Component
+@Service
 @PluginCommand("balancetop")
 public class BalanceTopCommand implements CommandExecutor {
 
@@ -45,7 +47,9 @@ public class BalanceTopCommand implements CommandExecutor {
     private final Function<Integer, Page<EconomyPlayerUnit>> balanceTopSupplier;
 
     @Qualifier("componentSupplier")
-    private final Function<MessageRequest, net.kyori.adventure.text.Component> componentSupplier;
+    private final Function<MessageRequest, Component> componentSupplier;
+
+    private final BiFunction<NgeMessage, Locale, Component> simpleComponentSupplier;
 
 
     @Override
@@ -54,7 +58,7 @@ public class BalanceTopCommand implements CommandExecutor {
         if (optionalPlayer.isPresent()) {
             final Player player = optionalPlayer.get();
             final Locale locale = player.locale();
-            if (NgeUtil.isPlayerPermitted(player, NgePermission.CMD_BALANCE_TOP)) {
+            if (NgeUtil.isPermitted(player, NgePermission.CMD_BALANCE_TOP)) {
                 if (args.length == 0) {
                     final Page<EconomyPlayerUnit> page = balanceTopSupplier.apply(0);
                     sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
@@ -84,28 +88,19 @@ public class BalanceTopCommand implements CommandExecutor {
                                     .ngeMessage(NgeMessage.MESSAGE_CMD_BALANCE_TOP_HEADER).build()));
                             sendPageMessage(sender, locale, pageNumber, page);
                         } else {
-                            sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
-                                    .locale(locale)
-                                    .ngeMessage(NgeMessage.MESSAGE_ERROR_INVALID_PAGE).build()));
+                            sender.sendMessage(simpleComponentSupplier.apply(NgeMessage.MESSAGE_ERROR_INVALID_PAGE, locale));
                         }
                     } else {
-                        sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
-                                .locale(locale)
-                                .ngeMessage(NgeMessage.MESSAGE_ERROR_INVALID_PAGE).build()));
+                        sender.sendMessage(simpleComponentSupplier.apply(NgeMessage.MESSAGE_ERROR_INVALID_PAGE, locale));
                     }
                 } else {
-                    sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
-                            .locale(locale)
-                            .ngeMessage(NgeMessage.MESSAGE_CMD_BALANCE_TOP_USAGE).build()));
+                    sender.sendMessage(simpleComponentSupplier.apply(NgeMessage.MESSAGE_CMD_BALANCE_TOP_USAGE, locale));
                 }
             } else {
-                sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
-                        .locale(locale)
-                        .ngeMessage(NgeMessage.MESSAGE_ERROR_NO_PERMISSION).build()));
+                sender.sendMessage(simpleComponentSupplier.apply(NgeMessage.MESSAGE_ERROR_NO_PERMISSION, locale));
             }
         } else {
-            sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
-                    .ngeMessage(NgeMessage.MESSAGE_ERROR_NO_CONSOLE).build()));
+            sender.sendMessage(simpleComponentSupplier.apply(NgeMessage.MESSAGE_ERROR_NO_CONSOLE, null));
         }
         return true;
     }
