@@ -16,7 +16,7 @@ import java.util.List;
 @Component
 public class EcoAutoCompleteListener implements Listener {
 
-    private static final String COMMAND = "/pay";
+    private static final String COMMAND = "/eco";
 
     @EventHandler
     public static void apply(final @NotNull TabCompleteEvent event) {
