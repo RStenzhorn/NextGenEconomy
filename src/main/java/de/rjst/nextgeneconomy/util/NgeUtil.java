@@ -5,7 +5,6 @@ import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +12,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -67,7 +68,20 @@ public class NgeUtil {
     }
 
 
-    public boolean isPlayerPermitted(final Permissible player, final NgePermission ngePermission) {
+    public boolean isPermitted(final Permissible player, final NgePermission ngePermission) {
         return player.hasPermission(ngePermission.getPermission());
+    }
+
+    public @NotNull List<String> getOfflinePlayers() {
+        final List<String> result = new LinkedList<>();
+        final OfflinePlayer[] offlinePlayers = Bukkit.getOfflinePlayers();
+        for (final OfflinePlayer offlinePlayer : offlinePlayers) {
+            result.add(offlinePlayer.getName());
+        }
+        return result;
+    }
+
+    public int getArgsLength(@NotNull final String command) {
+        return command.split(" ").length;
     }
 }
