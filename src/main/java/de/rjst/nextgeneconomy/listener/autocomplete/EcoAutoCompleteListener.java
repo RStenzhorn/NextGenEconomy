@@ -21,7 +21,7 @@ public class EcoAutoCompleteListener implements Listener {
     @EventHandler
     public static void apply(final @NotNull TabCompleteEvent event) {
         final String buffer = event.getBuffer();
-        if (COMMAND.startsWith(buffer)) {
+        if (buffer.startsWith(COMMAND)) {
             final int argsLength = NgeUtil.getArgsLength(buffer);
             List<String> completions = new ArrayList<>();
             if (argsLength == 3) {
