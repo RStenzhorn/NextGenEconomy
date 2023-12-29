@@ -4,6 +4,7 @@ import de.rjst.nextgeneconomy.NextGenEconomy;
 import de.rjst.nextgeneconomy.config.bean.PaperPluginCommand;
 import de.rjst.nextgeneconomy.config.bean.PluginCommand;
 import de.rjst.nextgeneconomy.config.bean.PluginListener;
+import de.rjst.nextgeneconomy.setting.NgePermission;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.Server;
 import org.bukkit.command.CommandExecutor;
@@ -59,8 +60,10 @@ public class PaperConfig {
             final PluginCommand annotation = clazz.getAnnotation(PluginCommand.class);
             if (annotation != null) {
                 final String name = annotation.value();
-                String[] aliases = annotation.aliases();
-                commandMap.register(plugin.getName(), new PaperPluginCommand(name, aliases, commandExecutor));
+                final String[] aliases = annotation.aliases();
+                final NgePermission permission = annotation.permission();
+                final String permissionName = permission.getPermission().getName();
+                commandMap.register(plugin.getName(), new PaperPluginCommand(name, aliases, permissionName, commandExecutor));
                 registeredCommand.getAndIncrement();
             }
         });

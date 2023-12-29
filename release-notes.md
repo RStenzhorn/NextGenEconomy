@@ -1,2 +1,3 @@
-# Release-Notes 1.0.2
-* Logging optimized
+# Release-Notes 1.1.0
+* Autocompleter
+* Refactoring

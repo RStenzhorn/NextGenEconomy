@@ -11,9 +11,10 @@ public class PaperPluginCommand extends Command {
 
     private final CommandExecutor commandExecutor;
 
-    public PaperPluginCommand(@NotNull final String name, String[] alias, final CommandExecutor commandExecutor) {
+    public PaperPluginCommand(@NotNull final String name, final String[] alias, final String permission, final CommandExecutor commandExecutor) {
         super(name);
         setAliases(Arrays.stream(alias).toList());
+        setPermission(permission);
         this.commandExecutor = commandExecutor;
     }
 
