@@ -108,7 +108,7 @@ public class BalanceTopCommand implements CommandExecutor {
     private void sendPageMessage(@NotNull final Audience sender, final Locale locale, final int pageNumber, final @NotNull Slice<EconomyPlayerUnit> page) {
         int rank = getRank(pageNumber, page.getSize());
 
-        for (final EconomyPlayerUnit unit : page) {
+        for (final EconomyPlayerUnit unit : page.getContent()) {
             final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(unit.getId());
             final BigDecimal balance = unit.getBalance();
             if (offlinePlayer.hasPlayedBefore()) {
