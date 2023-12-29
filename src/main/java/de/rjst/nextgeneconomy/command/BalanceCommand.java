@@ -32,7 +32,7 @@ import java.util.function.Function;
 
 @RequiredArgsConstructor
 @Service
-@PluginCommand(value = "balance", aliases = "money")
+@PluginCommand(value = "balance", aliases = "money", permission = NgePermission.CMD_BALANCE)
 public class BalanceCommand implements CommandExecutor {
 
     private final NextGenEconomyApi nextGenEconomyApi;

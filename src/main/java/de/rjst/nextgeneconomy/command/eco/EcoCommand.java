@@ -1,7 +1,7 @@
 package de.rjst.nextgeneconomy.command.eco;
 
-import de.rjst.nextgeneconomy.NextGenEconomy;
 import de.rjst.nextgeneconomy.api.NextGenEconomyApi;
+import de.rjst.nextgeneconomy.config.async.AsyncExecutor;
 import de.rjst.nextgeneconomy.config.bean.PluginCommand;
 import de.rjst.nextgeneconomy.model.EcoCommandRequestImpl;
 import de.rjst.nextgeneconomy.model.MessageRequest;
@@ -12,35 +12,38 @@ import de.rjst.nextgeneconomy.setting.NgePlaceholder;
 import de.rjst.nextgeneconomy.util.NgeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @Slf4j
 @RequiredArgsConstructor
-@PluginCommand("eco")
-@Component
+@PluginCommand(value = "eco", permission = NgePermission.CMD_ECO)
+@Service
 public class EcoCommand implements CommandExecutor {
 
     private final NextGenEconomyApi nextGenEconomyApi;
 
     private final List<EcoCommandExecutor> ecoCommandExecutors;
-    private final BukkitScheduler bukkitScheduler;
+    private final AsyncExecutor asyncExecutor;
 
     @Qualifier("componentSupplier")
-    private final Function<MessageRequest, net.kyori.adventure.text.Component> componentSupplier;
+    private final Function<MessageRequest, Component> componentSupplier;
+
+    private final BiFunction<NgeMessage, Locale, Component> simpleComponentSupplier;
 
     @Override
     public boolean onCommand(@NotNull final CommandSender sender, @NotNull final Command command, @NotNull final String label, @NotNull final String[] args) {
@@ -52,7 +55,7 @@ public class EcoCommand implements CommandExecutor {
             if (args.length == 3) {
                 final Optional<BigDecimal> optionalCurrency = NgeUtil.getBigDecimal(args[2]);
                 if (optionalCurrency.isPresent()) {
-                    bukkitScheduler.runTaskAsynchronously(NextGenEconomy.getInstance(), () -> {
+                    asyncExecutor.accept(() -> {
                         final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[1]);
                         final UUID uuid = offlinePlayer.getUniqueId();
                         if (nextGenEconomyApi.hasAccount(uuid)) {
@@ -66,9 +69,7 @@ public class EcoCommand implements CommandExecutor {
                                         .locale(locale)
                                         .build());
                             } else {
-                                sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
-                                        .locale(locale)
-                                        .ngeMessage(NgeMessage.MESSAGE_CMD_ECO_USAGE).build()));
+                                sender.sendMessage(simpleComponentSupplier.apply(NgeMessage.MESSAGE_CMD_ECO_USAGE, locale));
                             }
                         }
                     });
@@ -81,14 +82,10 @@ public class EcoCommand implements CommandExecutor {
                             .ngeMessage(NgeMessage.MESSAGE_ERROR_INVALID_CURRENCY).build()));
                 }
             } else {
-                sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
-                        .locale(locale)
-                        .ngeMessage(NgeMessage.MESSAGE_CMD_ECO_USAGE).build()));
+                sender.sendMessage(simpleComponentSupplier.apply(NgeMessage.MESSAGE_CMD_ECO_USAGE, locale));
             }
         } else {
-            sender.sendMessage(componentSupplier.apply(MessageRequestImpl.builder()
-                    .locale(locale)
-                    .ngeMessage(NgeMessage.MESSAGE_ERROR_NO_PERMISSION).build()));
+            sender.sendMessage(simpleComponentSupplier.apply(NgeMessage.MESSAGE_ERROR_NO_PERMISSION, locale));
         }
 
         return true;

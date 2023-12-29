@@ -37,7 +37,7 @@ import java.util.function.Function;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-@PluginCommand("balancetop")
+@PluginCommand(value = "balancetop", permission = NgePermission.CMD_BALANCE_TOP)
 public class BalanceTopCommand implements CommandExecutor {
 
     private final NextGenEconomyApi nextGenEconomyApi;

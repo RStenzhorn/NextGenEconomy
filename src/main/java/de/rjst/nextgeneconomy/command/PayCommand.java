@@ -29,7 +29,7 @@ import java.util.function.Function;
 
 @Slf4j
 @RequiredArgsConstructor
-@PluginCommand("pay")
+@PluginCommand(value = "pay", permission = NgePermission.CMD_PAY)
 @Service
 public class PayCommand implements CommandExecutor {
 
