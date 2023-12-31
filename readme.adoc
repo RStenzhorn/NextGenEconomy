@@ -33,10 +33,11 @@ um ein Wirtschaftsystem auf dem Server zu ermöglichen. Hierbei wurde das Framew
 
 * Plugin herunterladen und in den Plugins Ordner ziehen
 * Server neustarten
-* Konfiguration entsprechend anpassen (siehe 3.2)
+* Konfiguration entsprechend anpassen (siehe <<config>>)
 * Berechtigungen setzen
 * Server neustarten
 
+[#config]
 === Konfiguration
 In dem plugins/NextGenEconomy befindet sich die Datei "config.yml".
 
@@ -146,11 +147,11 @@ In dem plugins/NextGenEconomy befindet sich die Datei "config.yml".
 == Funktionen
 * Grundlegende Implementierung der Vault Schnittstelle
 * Transaktionalität sichergestellt
-* Verfügt über die folgenden Befehle
+* Verfügt über die Befehle siehe <<commands>>.
 
+[#commands]
 == Befehle
-
-Die Parameter in < > sind verpflichtend. In [ ] sind optional.
+Die Parameter in < > sind verpflichtend.In [ ] sind optional.
 
 |===
 |Befehl |Permission |Beschreibung|Alias|Konsolen
@@ -197,14 +198,17 @@ Die Parameter in < > sind verpflichtend. In [ ] sind optional.
 
 == Releases
 
-=== Release 1.1.0
+*Release 1.1.0*
+
 * Autocompleter
 * Refactoring
 
-=== Release 1.0.2
+*Release 1.0.2*
+
 * Logging optimized
 
-=== Release 1.0.1
+*Release 1.0.1*
+
 * Better Logging Transaction Errors
 
 == Zukünftige Features
