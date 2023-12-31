@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Controller;
 
 import java.math.BigDecimal;
 import java.util.Locale;
@@ -36,7 +36,7 @@ import java.util.function.Function;
 
 @Slf4j
 @RequiredArgsConstructor
-@Service
+@Controller
 @PluginCommand(value = "balancetop", permission = NgePermission.CMD_BALANCE_TOP)
 public class BalanceTopCommand implements CommandExecutor {
 

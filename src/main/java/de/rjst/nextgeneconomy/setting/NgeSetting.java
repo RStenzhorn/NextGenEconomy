@@ -8,10 +8,10 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum NgeSetting {
 
-    DB_DRIVER_CLASS("spring.datasource.driver-class-name","org.mariadb.jdbc.Driver"),
-    DB_URL("spring.datasource.url","jdbc:mariadb://ip:port/databaseName"),
-    DB_USER("spring.datasource.username","root"),
-    DB_PASSWORD("spring.datasource.password","password"),
+    DB_DRIVER_CLASS("spring.datasource.driver-class-name", "org.sqlite.JDBC"),
+    DB_URL("spring.datasource.url", "jdbc:sqlite:plugins/NextGenEconomy/database.db"),
+    DB_USER("spring.datasource.username", ""),
+    DB_PASSWORD("spring.datasource.password", ""),
     DB_DDL_AUTO("spring.jpa.hibernate.ddl-auto","update"),
     DB_SHOW_SQL("spring.jpa.show-sql","false"),
     DB_HIKARI_AUTO_COMMIT("spring.datasource.hikari.autoCommit","true"),
@@ -19,7 +19,7 @@ public enum NgeSetting {
     DB_HIKARI_IDLE_TIMEOUT("spring.datasource.hikari.idleTimeout","600000"),
     DB_HIKARI_KEEPALIVE_TIME("spring.datasource.hikari.keepAliveTime","0"),
     DB_HIKARI_MAX_LIFETIME("spring.datasource.hikari.maxLifetime","1800000"),
-    DB_HIKARI_MINIMUM_IDLE("spring.datasource.hikari.minimumIdle","10"),
+    DB_HIKARI_MINIMUM_IDLE("spring.datasource.hikari.minimumIdle","1"),
     DB_HIKARI_MAXIMUM_POOL_SIZE("spring.datasource.hikari.maximumPoolSize","10"),
     PREFIX("prefix", "[NextGenEconomy]"),
     START_BALANCE("start.balance", "0"),

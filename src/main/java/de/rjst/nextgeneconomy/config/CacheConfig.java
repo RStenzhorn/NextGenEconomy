@@ -15,6 +15,9 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static de.rjst.nextgeneconomy.setting.NgeCaches.BALANCE;
+import static de.rjst.nextgeneconomy.setting.NgeCaches.BALANCE_TOP;
+
 @RequiredArgsConstructor
 @Configuration
 @EnableCaching
@@ -25,7 +28,7 @@ public class CacheConfig {
     @Bean
     public Cache balanceTopCache() {
         final Integer balanceTopRefresh = propertySupplier.apply(NgeSetting.BALANCE_TOP_REFRESH, Integer.class);
-        return new CaffeineCache("balanceTop",
+        return new CaffeineCache(BALANCE_TOP,
                 Caffeine.newBuilder()
                         .expireAfterAccess(balanceTopRefresh, TimeUnit.MINUTES)
                         .build());
@@ -35,7 +38,7 @@ public class CacheConfig {
     @Bean
     public Cache balanceCache() {
         final Integer balanceRefresh = propertySupplier.apply(NgeSetting.BALANCE_REFRESH, Integer.class);
-        return new CaffeineCache("balance",
+        return new CaffeineCache(BALANCE,
                 Caffeine.newBuilder()
                         .expireAfterAccess(balanceRefresh, TimeUnit.MINUTES)
                         .build());

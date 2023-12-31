@@ -26,7 +26,7 @@ public enum NgeMessage {
     ),
     MESSAGE_ERROR_INVALID_CURRENCY(
             "messages.error.invalidCurrency",
-            "%PREFIX% Du hast einen ungültigen Geld-Betrag!",
+            "%PREFIX% Du hast einen ungültigen Geld-Betrag eingegeben!",
             "%PREFIX% You have entered an invalid money amount!"
     ),
     MESSAGE_ERROR_NOT_ENOUGH(

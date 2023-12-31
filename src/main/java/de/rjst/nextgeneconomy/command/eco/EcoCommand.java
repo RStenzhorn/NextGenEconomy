@@ -22,7 +22,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Controller;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -32,7 +32,7 @@ import java.util.function.Function;
 @Slf4j
 @RequiredArgsConstructor
 @PluginCommand(value = "eco", permission = NgePermission.CMD_ECO)
-@Service
+@Controller
 public class EcoCommand implements CommandExecutor {
 
     private final NextGenEconomyApi nextGenEconomyApi;
@@ -53,7 +53,7 @@ public class EcoCommand implements CommandExecutor {
 
         if (NgeUtil.isPermitted(sender, NgePermission.CMD_ECO)) {
             if (args.length == 3) {
-                final Optional<BigDecimal> optionalCurrency = NgeUtil.getBigDecimal(args[2]);
+                final Optional<BigDecimal> optionalCurrency = NgeUtil.getBigDecimalZero(args[2]);
                 if (optionalCurrency.isPresent()) {
                     asyncExecutor.accept(() -> {
                         final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[1]);

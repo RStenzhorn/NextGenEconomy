@@ -1,6 +1,5 @@
 package de.rjst.nextgeneconomy.command;
 
-import de.rjst.nextgeneconomy.NextGenEconomy;
 import de.rjst.nextgeneconomy.api.NextGenEconomyApi;
 import de.rjst.nextgeneconomy.config.async.AsyncExecutor;
 import de.rjst.nextgeneconomy.config.bean.PluginCommand;
@@ -20,7 +19,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Controller;
 
 import java.math.BigDecimal;
 import java.util.Locale;
@@ -31,7 +30,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @RequiredArgsConstructor
-@Service
+@Controller
 @PluginCommand(value = "balance", aliases = "money", permission = NgePermission.CMD_BALANCE)
 public class BalanceCommand implements CommandExecutor {
 

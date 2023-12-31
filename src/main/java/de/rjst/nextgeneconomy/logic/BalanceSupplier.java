@@ -11,13 +11,15 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 
+import static de.rjst.nextgeneconomy.setting.NgeCaches.BALANCE;
+
 @RequiredArgsConstructor
 @Service("balanceSupplier")
 public class BalanceSupplier implements Function<UUID, Optional<BigDecimal>> {
 
     private final EconomyPlayerRepository economyPlayerRepository;
 
-    @Cacheable(value = "balance", key = "#uuid")
+    @Cacheable(value = BALANCE, key = "#uuid")
     @Override
     public Optional<BigDecimal> apply(final UUID uuid) {
         BigDecimal result = null;

@@ -20,7 +20,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Controller;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -30,7 +30,7 @@ import java.util.function.Function;
 @Slf4j
 @RequiredArgsConstructor
 @PluginCommand(value = "pay", permission = NgePermission.CMD_PAY)
-@Service
+@Controller
 public class PayCommand implements CommandExecutor {
 
     private final NextGenEconomyApi nextGenEconomyApi;
