@@ -14,7 +14,7 @@
     <properties>
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.boot.version>3.1.5</spring.boot.version>
+        <spring.boot.version>3.2.1</spring.boot.version>
     </properties>
 
     <build>
@@ -23,7 +23,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
+                <version>3.12.1</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -76,13 +76,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.2.2</version>
+                <version>3.2.3</version>
             </plugin>
 
             <plugin>
                 <groupId>com.amashchenko.maven.plugin</groupId>
                 <artifactId>gitflow-maven-plugin</artifactId>
-                <version>1.20.0</version>
+                <version>1.21.0</version>
                 <configuration>
                     <gitFlowConfig>
                         <productionBranch>master</productionBranch>
@@ -158,19 +158,19 @@
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
-            <version>3.41.2.2</version>
+            <version>3.44.1.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-community-dialects</artifactId>
-            <version>6.2.13.Final</version>
+            <version>6.4.1.Final</version>
         </dependency>
 
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
-            <version>3.2.0</version>
+            <version>3.3.2</version>
             <scope>runtime</scope>
             <exclusions>
                 <exclusion>
@@ -208,21 +208,21 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.9.2</version>
+            <version>5.10.1</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.9.2</version>
+            <version>5.10.1</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
-            <version>4.5.1</version>
+            <version>5.8.0</version>
             <scope>test</scope>
         </dependency>
 
@@ -236,26 +236,26 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.21.0</version>
+            <version>3.24.2</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>2.0.9</version>
+            <version>2.0.10</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.4.12</version>
+            <version>1.4.14</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>nl.jqno.equalsverifier</groupId>
             <artifactId>equalsverifier</artifactId>
-            <version>3.15.4</version>
+            <version>3.15.5</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
