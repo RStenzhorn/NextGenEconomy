@@ -33,9 +33,21 @@ public class NgeUtil {
             if (result.compareTo(BigDecimal.ZERO) <= 0) {
                 result = null;
             }
-        } catch (final NumberFormatException ignored) {
-        }
+        } catch (final NumberFormatException ignored) {}
 
+        return Optional.ofNullable(result);
+    }
+
+    @NotNull
+    public Optional<BigDecimal> getBigDecimalZero(@NotNull final String currency) {
+        @Nullable BigDecimal result = null;
+        try {
+            final String replace = currency.replace(OLD_CHAR, NEW_CHAR);
+            result = new BigDecimal(replace).setScale(2, RoundingMode.FLOOR);
+            if (result.compareTo(BigDecimal.ZERO) < 0) {
+                result = null;
+            }
+        } catch (final NumberFormatException ignored) {}
         return Optional.ofNullable(result);
     }
 

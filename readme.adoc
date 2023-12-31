@@ -39,20 +39,175 @@ um ein Wirtschaftsystem auf dem Server zu ermöglichen.
 
 === Konfiguration
 In dem plugins/NextGenEconomy befindet sich die Datei "config.yml".
-[source,yaml,highlight="dark"]
-----
-include::default.yml[]
-----
+
+|===
+|Property |Standardwert |Beschreibung
+
+|spring.datasource.driver-class-name
+|org.sqlite.JDBC
+|Gibt die Treiber-Klasse der Datenbank an. Als Standard ist es für SQLite konfiguriert. Die Treiber-Klasse für MariaDB ist org.mariadb.jdbc.Driver
+
+|spring.datasource.url
+|jdbc:sqlite:plugins/NextGenEconomy/database.db
+|Connection-String Für MariaDB jdbc:mariadb://ip:port/databaseName
+
+|spring.datasource.username
+|
+|Datenbank-Nutzer
+
+|spring.datasource.password
+|
+|Datenbank-Passwort
+
+|spring.jpa.hibernate.ddl-auto
+|update
+|Nicht verändern.
+
+|spring.jpa.show-sql
+|false
+|Wenn es aktiviert ist, werden die Datenbank Abfragen geloggt.
+
+|spring.datasource.hikari.autoCommit
+|true
+|siehe https://github.com/brettwooldridge/HikariCP[HikariCP]
+
+|spring.datasource.hikari.connectionTimeout
+|30000
+|siehe https://github.com/brettwooldridge/HikariCP[HikariCP]
+
+|spring.datasource.hikari.idleTimeout
+|600000
+|siehe https://github.com/brettwooldridge/HikariCP[HikariCP]
+
+|spring.datasource.hikari.keepAliveTime
+|0
+|siehe https://github.com/brettwooldridge/HikariCP[HikariCP]
+
+|spring.datasource.hikari.maxLifetime
+|1800000
+|siehe https://github.com/brettwooldridge/HikariCP[HikariCP]
+
+|spring.datasource.hikari.minimumIdle
+|1
+|siehe https://github.com/brettwooldridge/HikariCP[HikariCP]
+
+|spring.datasource.hikari.maximumPoolSize
+|10
+|siehe https://github.com/brettwooldridge/HikariCP[HikariCP]
+
+|prefix
+|[NextGenEconomy]
+|Der Prefix bei einer Plugin-Nachricht.
+
+|start.balance
+|0
+|Start-Kapital bei neuen Accounts
+
+|balanceTop.pageSize
+|10
+|Anzahl der Spieler pro Seite von dem Befehl Balancetop
+
+|balanceTop.refresh
+|15
+|Anzahl in Minuten bis der Cache von der BalanceTop-Seite invalidiert wird
+
+|balance.refresh
+|60
+|Anzahl in Minuten bis der Cache von dem Befehl Balance invalidiert wird. Er wird auch invalidiert, wenn eine Transaktion auf den Spieler ausgeführt wurde.
+
+|currency.symbol
+|€
+|Währungssymbol
+
+|currency.singular
+|Euro
+|Ausschreibung der Währung Singular
+
+|currency.plural
+|Euros
+|Ausschreibung der Währung Plural
+
+|currency.localeFormat
+|de_DE
+|Formatierung des Geldbetrags auf Basis der Locales
+
+|currency.fractionDigits
+|2
+|Anzahl der Nachkommastellen
+
+|currency.format
+|%LOCALE_FORMAT% %CURRENCY_NAME% %CURRENCY_SYMBOL%
+|zusammengesetzte Formatierung
+
+
+|===
 
 
 == Funktionen
+* Grundlegende Implementierung der Vault Schnittstelle
+* Transaktionalität sichergestellt
+* Verfügt über die folgenden Befehle
 
 == Befehle
 
+Die Parameter in < > sind verpflichtend. In [ ] sind optional.
+
+|===
+|Befehl |Permission |Beschreibung|Alias|Konsolen
+
+|balance
+|nge.cmd.balance
+|Zeigt den Kontostand des Anwenders
+|money
+|Nein
+
+|balance [Spieler]
+|nge.cmd.balance.other
+|Zeigt den Kontostand des Spielers an
+|money
+|Nein
+
+|balancetop
+|nge.cmd.balancetop
+|Zeigt die erste Toplist-Seite
+|
+|Nein
+
+|balancetop <Seite>
+|nge.cmd.balancetop
+|Zeigt die Seite <Seite>, welche als Parameter übergeben wurde
+|
+|Nein
+
+|pay <Spieler> <Betrag>
+|nge.cmd.pay
+|Der Spieler zahlt den Betrag <Betrag> an den Spieler <Spieler>
+|
+|Nein
+
+|eco <give oder take oder set> <Spieler> <Betrag>
+|nge.cmd.eco
+|Administrative Manipulation des Kontostands eines Spielers <Spieler>. <Betrag> ist der Betrag,der <take> Abziehen, <give> hinzufügen und <set> festsetzen wird.
+|
+|Ja
+
+
+|===
+
+
 == Releases
 
-=== Verlauf
+=== Release 1.1.0
+* Autocompleter
+* Refactoring
 
-=== Zukünftige Features
+=== Release 1.0.2
+* Logging optimized
+
+=== Release 1.0.1
+* Better Logging Transaction Errors
+
+== Zukünftige Features
+* Bankensupport
 
 == FAQ

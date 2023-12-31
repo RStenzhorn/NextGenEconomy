@@ -20,6 +20,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import static de.rjst.nextgeneconomy.setting.NgeCaches.BALANCE;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service("transactionConsumer")
@@ -28,7 +30,7 @@ public class TransactionConsumer implements Consumer<Transaction> {
     private final EconomyPlayerRepository economyPlayerRepository;
 
     @Override
-    @CacheEvict(value = "balance", key = "#transaction.target")
+    @CacheEvict(value = BALANCE, key = "#transaction.target")
     @Transactional(isolation = Isolation.READ_COMMITTED, timeout = 10)
     public void accept(final @NotNull Transaction transaction) {
         final UUID uuid = transaction.getTarget();
