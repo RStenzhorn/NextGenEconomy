@@ -8,8 +8,8 @@ import de.rjst.nextgeneconomy.logic.config.PropertySupplier;
 import de.rjst.nextgeneconomy.model.Transaction;
 import de.rjst.nextgeneconomy.model.TransactionImpl;
 import de.rjst.nextgeneconomy.model.TransactionType;
-import de.rjst.nextgeneconomy.setting.NgeSetting;
 import de.rjst.nextgeneconomy.setting.NgePlaceholder;
+import de.rjst.nextgeneconomy.setting.NgeSetting;
 import de.rjst.nextgeneconomy.util.NgeMessageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ import java.util.function.Function;
 public class NextGenEconomyApiImpl implements NextGenEconomyApi {
 
     private final EconomyPlayerRepository economyPlayerRepository;
-    private final Consumer<Transaction> transactionConsumer;
+    private final Function<Transaction, Boolean> transactionExecuteFunction;
     private final Function<UUID, Optional<BigDecimal>> balanceSupplier;
 
     private final PropertySupplier propertySupplier;
@@ -63,66 +63,32 @@ public class NextGenEconomyApiImpl implements NextGenEconomyApi {
 
     @Override
     public Boolean addBalance(final UUID uuid, final BigDecimal amount) {
-        boolean result;
         final Transaction transaction = TransactionImpl.builder()
                 .type(TransactionType.ADD)
                 .target(uuid)
                 .currency(amount)
                 .build();
-        try {
-            transactionConsumer.accept(transaction);
-            result = true;
-        } catch (final NotEnoughCurrencyException | EconomyPlayerNotFoundException ex) {
-            log.warn("Transaction: {}", transaction);
-            result = false;
-        } catch (final RuntimeException ex) {
-            log.error("Transaction: {}", transaction);
-            result = false;
-        }
-        return result;
+        return transactionExecuteFunction.apply(transaction);
     }
 
     @Override
     public Boolean removeBalance(final UUID uuid, final BigDecimal amount) {
-        boolean result;
-
         final Transaction transaction = TransactionImpl.builder()
                 .type(TransactionType.REMOVE)
                 .target(uuid)
                 .currency(amount)
                 .build();
-        try {
-            transactionConsumer.accept(transaction);
-            result = true;
-        } catch (final NotEnoughCurrencyException | EconomyPlayerNotFoundException ex) {
-            log.warn("Transaction: {}", transaction);
-            result = false;
-        } catch (final RuntimeException ex) {
-            log.error("Transaction: {}", transaction);
-            result = false;
-        }
-        return result;
+        return transactionExecuteFunction.apply(transaction);
     }
 
     @Override
     public Boolean setBalance(final UUID uuid, final BigDecimal amount) {
-        boolean result;
         final Transaction transaction = TransactionImpl.builder()
                 .type(TransactionType.SET)
                 .target(uuid)
                 .currency(amount)
                 .build();
-        try {
-            transactionConsumer.accept(transaction);
-            result = true;
-        } catch (final NotEnoughCurrencyException | EconomyPlayerNotFoundException ex) {
-            log.warn("Transaction: {}", transaction);
-            result = false;
-        } catch (final RuntimeException ex) {
-            log.error("Transaction: {}", transaction);
-            result = false;
-        }
-        return result;
+        return transactionExecuteFunction.apply(transaction);
     }
 
     @Override
