@@ -194,6 +194,11 @@ Parameters in < > are mandatory. In [ ] are optional.
 
 == Releases
 
+*Release 1.2.2*
+
+* Autocomplete fix
+* Refactoring
+
 
 *Release 1.2.1*
 
@@ -221,10 +226,10 @@ Parameters in < > are mandatory. In [ ] are optional.
 
 * Better Logging Transaction Errors
 
-== Zukünftige Features
-* Bankensupport
+== Coming soon
+* Bank Support
 * EconomyApi
-* Multi-Währungssupport mit Apis
+* (Multi-Currency Support)
 
 == FAQ
 
