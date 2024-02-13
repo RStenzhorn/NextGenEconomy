@@ -35,8 +35,8 @@ public class BalanceTopAutoCompleteListener implements Listener {
             final int argsLength = NgeUtil.getArgsLength(buffer);
 
             List<String> completions = new ArrayList<>();
-            if (argsLength == 1) {
-                final String arg = NgeUtil.getArg(buffer, 0);
+            if (argsLength == 2) {
+                final String arg = NgeUtil.getArg(buffer, 1);
                 completions = getCompletionsPages(pages, arg);
             }
             event.setCompletions(completions);
