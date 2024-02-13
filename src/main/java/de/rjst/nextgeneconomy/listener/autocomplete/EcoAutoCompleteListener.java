@@ -25,7 +25,8 @@ public class EcoAutoCompleteListener implements Listener {
             final int argsLength = NgeUtil.getArgsLength(buffer);
             List<String> completions = new ArrayList<>();
             if (argsLength == 3) {
-                completions = NgeUtil.getOfflinePlayers();
+                final String arg = NgeUtil.getArg(buffer, 2);
+                completions = NgeUtil.getOfflinePlayers(arg);
             } else if (argsLength == 2) {
                 completions = TransactionType.getCompletions();
             }

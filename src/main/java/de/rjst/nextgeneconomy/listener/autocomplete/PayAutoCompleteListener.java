@@ -2,7 +2,6 @@ package de.rjst.nextgeneconomy.listener.autocomplete;
 
 import de.rjst.nextgeneconomy.config.bean.PluginListener;
 import de.rjst.nextgeneconomy.util.NgeUtil;
-import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.TabCompleteEvent;
@@ -25,7 +24,8 @@ public class PayAutoCompleteListener implements Listener {
             final int argsLength = NgeUtil.getArgsLength(buffer);
             List<String> completions = new ArrayList<>();
             if (argsLength == 2) {
-                completions = NgeUtil.getOfflinePlayers();
+                final String arg = NgeUtil.getArg(buffer, 1);
+                completions = NgeUtil.getOfflinePlayers(arg);
             }
             event.setCompletions(completions);
         }
