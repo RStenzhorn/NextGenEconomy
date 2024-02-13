@@ -1,4 +1,4 @@
-# Release-Notes 1.2.1
-* Logging
+# Release-Notes 1.2.2
+* Autocomplete fix
 * Refactoring
 

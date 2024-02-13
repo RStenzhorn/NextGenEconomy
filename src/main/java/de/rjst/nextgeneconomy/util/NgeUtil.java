@@ -84,16 +84,24 @@ public class NgeUtil {
         return player.hasPermission(ngePermission.getPermission());
     }
 
-    public @NotNull List<String> getOfflinePlayers() {
+    public @NotNull List<String> getOfflinePlayers(final String startWith) {
         final List<String> result = new LinkedList<>();
         final OfflinePlayer[] offlinePlayers = Bukkit.getOfflinePlayers();
         for (final OfflinePlayer offlinePlayer : offlinePlayers) {
-            result.add(offlinePlayer.getName());
+            final String name = offlinePlayer.getName();
+            if (name != null && name.startsWith(startWith)) {
+                result.add(name);
+            }
         }
         return result;
     }
 
     public int getArgsLength(@NotNull final String command) {
         return command.split(" ").length;
+    }
+
+    public String getArg(@NotNull final String command, final int index) {
+        final String[] split = command.split(" ");
+        return split[index];
     }
 }

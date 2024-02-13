@@ -1,7 +1,7 @@
 package de.rjst.nextgeneconomy.logic;
 
-import de.rjst.nextgeneconomy.exception.EconomyPlayerNotFoundException;
-import de.rjst.nextgeneconomy.exception.NotEnoughCurrencyException;
+import de.rjst.nextgeneconomy.config.exception.EconomyPlayerNotFoundException;
+import de.rjst.nextgeneconomy.config.exception.NotEnoughCurrencyException;
 import de.rjst.nextgeneconomy.model.Transaction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

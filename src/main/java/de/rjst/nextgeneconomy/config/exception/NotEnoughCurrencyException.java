@@ -1,4 +1,4 @@
-package de.rjst.nextgeneconomy.exception;
+package de.rjst.nextgeneconomy.config.exception;
 
 import java.io.Serial;
 
